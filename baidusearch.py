@@ -27,7 +27,6 @@ class BaiduSearch(object):
     def save2json(self):
         date = time.strftime("%Y-%m-%d",time.localtime())
         file_name = time.strftime("%Y%m%d",time.localtime())
-        file_name = str(time.time())[10]
         with open(file_name+'.json','w',encoding='utf-8') as f:
             f.write(json.dumps({"data":self.items,"date":date},ensure_ascii=False))
 

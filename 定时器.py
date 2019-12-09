@@ -3,7 +3,9 @@ import time
 import schedule
 from baidusearch import BaiduSearch
 
-schedule.every(1).minutes.do(BaiduSearch.start)
+
+
+schedule.every().day.at("02:00").do(BaiduSearch.start)
 while True:
     schedule.run_pending()
     time.sleep(1)
