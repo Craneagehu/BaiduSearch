@@ -1,3 +1,5 @@
+import os
+import time
 
 from flask import Flask, jsonify
 from flask import request
@@ -13,10 +15,16 @@ app = Flask(__name__)
 def baidu_search():
     if request.method == "GET":
         date = request.args.get('date')
-        with open(date+'.json','r',encoding='utf-8') as f:
-            result = json.load(f)
-            print(result)
-            resp = jsonify(result)
+
+        if os.path.exists(date + '.json'):
+            with open(date+'.json','r',encoding='utf-8') as f:
+                result = json.load(f)
+                print(result)
+                resp = jsonify(result)
+                resp.headers['Access-Control-Allow-Origin'] = '*'  # 防跨域请求
+                return resp
+        else:
+            resp = jsonify({"data":"没找到该文件","date":time.strftime("%Y-%m-%d",time.localtime())})
             resp.headers['Access-Control-Allow-Origin'] = '*'  # 防跨域请求
             return resp
 
