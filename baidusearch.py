@@ -1,10 +1,8 @@
 # -*- coding:utf-8 -*-
-import os
 import re
 import json
 import time
 import requests
-import schedule
 from lxml import etree
 
 class BaiduSearch(object):
@@ -21,15 +19,16 @@ class BaiduSearch(object):
             'Upgrade-Insecure-Requests': '1',
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36'
         }
-
         self.items=[]
 
+    # 将搜索结果数据保存到json文件中
     def save2json(self):
         date = time.strftime("%Y-%m-%d",time.localtime())
         file_name = time.strftime("%Y%m%d",time.localtime())
         with open(file_name+'.json','w',encoding='utf-8') as f:
             f.write(json.dumps({"data":self.items,"date":date},ensure_ascii=False))
 
+    # 百度搜索关键词并提取结果
     def run(self,kw):
         full_url = self.base_url+kw
         response = requests.get(full_url,headers=self.headers)
@@ -44,8 +43,7 @@ class BaiduSearch(object):
             dic[kw] = counts
             self.items.append(dic)
 
-
-
+    # 读取配置文件中的关键词
     def read_keywords(self):
         with open("keywords.txt",'r',encoding='utf-8') as f:
             keywords = f.read()
@@ -53,10 +51,14 @@ class BaiduSearch(object):
             for kw in keywords_list:
                 self.run(kw)
 
+    # 主程序
     def main(self):
-        self.read_keywords()
-        self.save2json()
-        print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
+        try:
+            self.read_keywords()
+            self.save2json()
+            # print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
+        except Exception as e:
+            print(f"出现异常：{e}")
 
     @classmethod
     def start(cls):
@@ -65,6 +67,7 @@ class BaiduSearch(object):
 
 
 if __name__ == '__main__':
+    # 调用启动入口
     BaiduSearch.start()
 
 

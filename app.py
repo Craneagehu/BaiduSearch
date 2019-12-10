@@ -1,10 +1,9 @@
+# -*- coding:utf-8 -*-
 import os
 import time
-
-from flask import Flask, jsonify
-from flask import request
 import json
-
+from flask import request
+from flask import Flask, jsonify
 from gevent.pywsgi import WSGIServer
 
 app = Flask(__name__)
@@ -19,7 +18,6 @@ def baidu_search():
         if os.path.exists(date + '.json'):
             with open(date+'.json','r',encoding='utf-8') as f:
                 result = json.load(f)
-                print(result)
                 resp = jsonify(result)
                 resp.headers['Access-Control-Allow-Origin'] = '*'  # 防跨域请求
                 return resp
@@ -31,5 +29,5 @@ def baidu_search():
 
 if __name__ == '__main__':
     app.config["JSON_AS_ASCII"] = False
-    app.run(debug=True, host='0.0.0.0', port=5001)
-    #WSGIServer(('0.0.0.0', 5001), app).serve_forever()
+    #app.run(debug=True, host='0.0.0.0', port=5001)
+    WSGIServer(('0.0.0.0', 5001), app).serve_forever()
