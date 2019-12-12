@@ -27,7 +27,10 @@ def baidu_search():
             return resp
 
 
-if __name__ == '__main__':
+def run():
     app.config["JSON_AS_ASCII"] = False
     #app.run(debug=True, host='0.0.0.0', port=5001)
     WSGIServer(('0.0.0.0', 5001), app).serve_forever()
+
+if __name__ == '__main__':
+    run()
